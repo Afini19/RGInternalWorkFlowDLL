@@ -1,0 +1,1 @@
+vbc /target:library /out:bin/VifeadiHumeLib1.dll /nowarn /r:System.dll /r:System.Core.dll /r:System.XML.dll  /r:System.Web.dll /r:System.Data.dll /r:../genruntimedll/vifeandi.genlib.dll /r:../genruntimedll/email2u.dll /r:../genruntimedll/ViFeandi.Notification.Proxy.dll /r:../genruntimedll/vifeandiemail.dll /r:../genruntimedll/vifeandilic.dll *.vb
