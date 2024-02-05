@@ -49,7 +49,7 @@ public class WebLib
             domain = HttpContext.Current.Request.Url.Scheme + "://" + domainPart(0)
         End If
 
-        Dim returnURL As String = "http://www.humecementconnect.com.my"
+        Dim returnURL As String = "http://www.humecementconnect.com.my" 'need to change
         '        returnURL = (domain + HttpContext.Current.Request.RawUrl).Replace(WebLib.GetFileNameWithQueryString(), "")
 
         Return returnURL
@@ -746,8 +746,8 @@ public class WebLib
 
         cn.open()
         cmd.CommandText = "Select top 1 " & pIDField & " from " & pTable & " where " & pFieldName & "='" & pCode & "' " & ltemp
-        '        response.write(cmd.CommandText)
-        weblib.ErrorTrap = cmd.CommandText
+        LogtheAudit(cmd.CommandText)
+        WebLib.ErrorTrap = cmd.CommandText
         cmd.Connection = cn
         ad.SelectCommand = cmd
         ad.Fill(ds, "datarecords")
@@ -976,6 +976,24 @@ public class WebLib
         End Try
 
     End Function
+
+    Public Shared Function FormatDateFullFormatDDMMYYYYtoYYYYMMDD(ByVal TenDigitdateformat As String)
+
+        If (TenDigitdateformat.Length < 10) Then
+            Return TenDigitdateformat
+        End If
+
+        TenDigitdateformat = TenDigitdateformat.Replace("/", "")
+        TenDigitdateformat = TenDigitdateformat.Replace("-", "")
+
+        If (TenDigitdateformat.Length < 8) Then
+            Return TenDigitdateformat
+        End If
+
+        Return TenDigitdateformat.Substring(4, 4) + TenDigitdateformat.Substring(2, 2) + TenDigitdateformat.Substring(0, 2)
+
+    End Function
+
     Public Shared Function formatthemoney(ByVal pamount As String) As String
         Try
 
@@ -1193,27 +1211,27 @@ public class WebLib
     End Sub
     Public Shared Function hasmodrights(ByVal pNameSpace As String, ByVal pAppCode As String, ByVal pPrefix As String) As Boolean
 
-        If hasrights(pNAmeSpace, pAppCode, pPrefix & "1") = True Then
+        If hasrights(pNameSpace, pAppCode, pPrefix & "1") = True Then
             Return True
             Exit Function
         End If
 
-        If hasrights(pNAmeSpace, pAppCode, pPrefix & "2") = True Then
+        If hasrights(pNameSpace, pAppCode, pPrefix & "2") = True Then
             Return True
             Exit Function
         End If
 
-        If hasrights(pNAmeSpace, pAppCode, pPrefix & "3") = True Then
+        If hasrights(pNameSpace, pAppCode, pPrefix & "3") = True Then
             Return True
             Exit Function
         End If
 
-        If hasrights(pNAmeSpace, pAppCode, pPrefix & "4") = True Then
+        If hasrights(pNameSpace, pAppCode, pPrefix & "4") = True Then
             Return True
             Exit Function
         End If
 
-        If hasrights(pNAmeSpace, pAppCode, pPrefix & "5") = True Then
+        If hasrights(pNameSpace, pAppCode, pPrefix & "5") = True Then
             Return True
             Exit Function
         End If
@@ -1221,15 +1239,15 @@ public class WebLib
 
     End Function
     Public Shared Function hasrights(ByVal pNameSpace As String, ByVal pAppCode As String, ByVal pRights As String) As Boolean
-        If loginisfulladmin = True Then
+        If LoginIsFullAdmin = True Then
             Return True
             Exit Function
         End If
-        If (pNameSpace & "" & pRights & "").trim = "" Then
+        If (pNameSpace & "" & pRights & "").Trim = "" Then
             Return False
             Exit Function
         End If
-        If microsoft.visualbasic.instr(1, LoginRightsString, pNameSpace & pRights & ";;") > 0 Then
+        If Microsoft.VisualBasic.instr(1, LoginRightsString, pNameSpace & pRights & ";;") > 0 Then
             Return True
         Else
             Return False
@@ -1473,6 +1491,20 @@ public class WebLib
         End Set
     End Property
 
+    Public Shared Sub LogtheAudit(ByVal theMessage As String)
+        Dim strFile As String = "c:\officeonelog\ErrorLog3.txt"
+        Dim fileExists As Boolean = File.Exists(strFile)
+
+        Try
+
+            Using sw As New StreamWriter(File.Open(strFile, FileMode.Append))
+                sw.WriteLine(DateTime.Now & " - " & theMessage)
+            End Using
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
 End Class
 Public Class Record_SearckKey
     Public KeyCaption As String = ""
@@ -1543,6 +1575,20 @@ Public Class Record_SearckKey
             Return ""
         End If
     End Function
+
+    Public Shared Sub LogtheAudit(ByVal theMessage As String)
+        Dim strFile As String = "c:\officeonelog\ErrorLog3.txt"
+        Dim fileExists As Boolean = File.Exists(strFile)
+
+        Try
+
+            Using sw As New StreamWriter(File.Open(strFile, FileMode.Append))
+                sw.WriteLine(DateTime.Now & " - " & theMessage)
+            End Using
+        Catch ex As Exception
+
+        End Try
+    End Sub
 
 End Class
 

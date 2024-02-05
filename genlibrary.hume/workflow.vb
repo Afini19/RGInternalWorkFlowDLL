@@ -42,7 +42,7 @@ Public Class clsWorkflow
             pLevel = "NULL"
         End If
 
-        Return "Insert into workflowaudit (wfa_code,wfa_refno,wfa_description,wfa_ucode,wfa_createon,wfa_createby,wfa_merchantid,wfa_filtercode,wfa_level) Values " & _
+        Return "Insert into workflowaudit (wfa_code,wfa_refno,wfa_description,wfa_ucode,wfa_createon,wfa_createby,wfa_merchantid,wfa_filtercode,wfa_level) Values " &
                         "('" & pType & "','" & pRefNo & "','" & pDescription & "','" & pucode & "',getdate(),'" & WebLib.LoginUser & "','" & WebLib.MerchantID & "','" & WebLib.FilterCode & "'," & pLevel & ")"
 
     End Function
@@ -178,7 +178,7 @@ Public Class clsWorkflowEmail
             Case "A"
                 lfieldname = "wui_emailA"
             Case "U"
-                If version2 = True Then
+                If Version2 = True Then
                     lfieldname = "wui_emailS"
                 Else
                     lfieldname = "wui_emailA"
@@ -203,8 +203,8 @@ Public Class clsWorkflowEmail
         'lsql = "select * from(Select distinct ROW_NUMBER() OVER (ORDER BY usr_loginid) as rownumber, usr_loginid,usr_name,usr_email,wur_wgroupid from secuserinfo inner join wgrouprights on secuserinfo.usr_id = wur_uid and Charindex('''' + convert(varchar(max),wur_wgroupid) + '''',(Select top 1  '''' + replace(isnull(" & lfieldname & ",''),';;',''',''') + '0''' from workflowitems where wui_wid=" & WorkFlowIDLinkField & " and isnull(wui_no,0)=" & WorkflowLevelField & ")) <> 0  where RTRIM(ISNULL(usr_email,'')) <> '') a "
         ' do not trigger email to disabled user 
         lsql = "select * from(Select distinct ROW_NUMBER() OVER (ORDER BY usr_loginid) as rownumber, usr_loginid,usr_name,usr_email,wur_wgroupid from secuserinfo inner join wgrouprights on secuserinfo.usr_id = wur_uid And Charindex('''' + convert(varchar(max),wur_wgroupid) + '''',(Select top 1  '''' + replace(isnull(" & lfieldname & ",''),';;',''',''') + '0''' from workflowitems where wui_wid=" & WorkFlowIDLinkField & " And isnull(wui_no,0)=" & WorkflowLevelField & ")) <> 0  where RTRIM(ISNULL(usr_email,'')) <> '' and usr_disable = 0 ) temptable "
-        
-		Return lsql
+
+        Return lsql
 
     End Function
     Public Function NotifyUsers(ByVal WorkFlowID As String, ByVal WorkflowLevelField As String, ByVal WorkFlowAction As String, ByVal docnamespace As String, ByVal workflowuniqueid As String, Optional ByVal Version2 As Boolean = False, Optional ByVal adhocSendToCust As String = "", Optional ByVal adhocSendToEmail As String = "") As Boolean
@@ -360,10 +360,10 @@ Public Class clsWorkflowEmail
                     Dim lcode As String = ""
                     Dim lURL As String
                     lcode = oore.web_redirect("WORKFLOW", 30, 10, dr("usr_loginid") & "", WorkFlowID, docnamespace, workflowuniqueid)
-                    If (lcode & "").trim <> "" Then
-                        lurl = oowl.AbsoluteWebPath & "/modules/general/redirect.aspx?c=" & lcode
-                        objEmail.EmailBody = objEmail.EmailBody.replace("#SecureURL#", lurl)
-                        objEmail.EmailSubject = objEmail.EmailSubject.replace("#SecureURL#", lurl)
+                    If (lcode & "").Trim <> "" Then
+                        lURL = oowl.AbsoluteWebPath & "/modules/general/redirect.aspx?c=" & lcode
+                        objEmail.EmailBody = objEmail.EmailBody.replace("#SecureURL#", lURL)
+                        objEmail.EmailSubject = objEmail.EmailSubject.replace("#SecureURL#", lURL)
 
                     End If
                     oore = Nothing
@@ -400,7 +400,7 @@ Public Class clsWorkflowEmail
                 Dim noti_smtpport As String = objEmail._smtpport
                 Dim noti_ssl As Boolean = objEmail._SSL
 
-                If ooonoti.notify(ConnectionStr, noti_MerchantID, NotificationType, noti_toNAme, noti_Message, noti_CCCode, noti_MobileNo, noti_EventCode, noti_toEmail, noti_FromNAme, noti_FromEmail, noti_EmailCC, noti_emailbcc, noti_EmailSubject, 10, noti_smtpserver, noti_smtpuserid, noti_smtppassword, noti_smtpport, noti_ssl) = False Then
+                If ooonoti.notify(ConnectionStr, noti_MerchantID, NotificationType, noti_toNAme, noti_Message, noti_CCCode, noti_MobileNo, noti_EventCode, noti_toEmail, noti_FromNAme, noti_FromEmail, noti_EmailCC, noti_EmailBCC, noti_EmailSubject, 10, noti_smtpserver, noti_smtpuserid, noti_smtppassword, noti_smtpport, noti_ssl) = False Then
                     '                    ooonoti = Nothing
                     '                   ErrorMsg = ooonoti.ErrorMsg
                     '                  Return False
@@ -426,7 +426,7 @@ Public Class clsWorkflowEmail
             cn.Dispose()
             Return True
         Catch ex As Exception
-            ErrorMSg = ex.MEssage
+            ErrorMsg = ex.Message
             Return False
         End Try
 
@@ -450,8 +450,8 @@ Public Class clsWorkflowEmail
             For Each dr In ds.Tables("datarecords").Rows
 
 
-                EmailSubject = EmailSubject.replace("#CustomerName#", dr("wst_param1") & "")
-                EmailSubject = EmailSubject.replace("#WorkFlowName#", dr("wst_subject") & "")
+                EmailSubject = EmailSubject.Replace("#CustomerName#", dr("wst_param1") & "")
+                EmailSubject = EmailSubject.Replace("#WorkFlowName#", dr("wst_subject") & "")
                 If adhocSendToCust = "Y" Then
                     EmailSubject = EmailSubject.Replace("#DocumentNo#", dr("wst_param3") & "")
                 Else
@@ -460,8 +460,8 @@ Public Class clsWorkflowEmail
                 EmailSubject = EmailSubject.Replace("#CompanyName#", dr("companyname") & "")
 
                 '********************************************************************************************
-                Emailbody = Emailbody.replace("#CustomerName#", dr("wst_param1") & "")
-                Emailbody = Emailbody.replace("#WorkFlowName#", dr("wst_subject") & "")
+                Emailbody = Emailbody.Replace("#CustomerName#", dr("wst_param1") & "")
+                Emailbody = Emailbody.Replace("#WorkFlowName#", dr("wst_subject") & "")
                 If adhocSendToCust = "Y" Then
                     Emailbody = Emailbody.Replace("#DocumentNo#", dr("wst_param3") & "")
                 Else

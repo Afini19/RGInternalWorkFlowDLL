@@ -55,7 +55,7 @@ Public Class listpage
     Private Sub Page_Init(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Init
 
         If Weblib.LoginUser.Trim = "" Then
-            response.redirect("~/login.aspx")
+            response.redirect("~/loginstaff.aspx")
         End If
 
         Call InitObjects()
@@ -373,8 +373,8 @@ Public Class listpage
             End If
 
             cn.Open()
-            cmd.CommandText = "Select " & _selectprefix & " " & pFieldNames & " from " & TableName & " " & pJoinFields & " " & _p_searchkey
-
+            cmd.CommandText = "Select * from ( Select " & _selectprefix & " " & pFieldNames & " from " & TableName & " " & pJoinFields & " ) as k " & _p_searchkey
+            LogtheAudit(cmd.CommandText)
             _SQLStatement = cmd.CommandText
             Weblib.ErrorTrap = cmd.CommandText
 
@@ -464,7 +464,124 @@ Public Class listpage
 
 
             cn.Open()
-            cmd.CommandText = "Delete from " & TableName & " " & _p_searchkey & ltempwhere
+            If (TableName.Trim.Contains(" ")) Then
+                cmd.CommandText = "Delete " & TableName.TrimEnd.Split(" ")(1) & " from " & TableName & " " & _p_searchkey & ltempwhere
+            Else
+                cmd.CommandText = "Delete from " & TableName & " " & _p_searchkey & ltempwhere
+            End If
+
+            LogtheAudit(cmd.CommandText)
+            cmd.Connection = cn
+            cmd.ExecuteNonQuery()
+            cn.Dispose()
+            cmd.Dispose()
+
+            Call loaddata()
+        Catch ex As Exception
+            lblmessage.text = ex.Message
+        End Try
+
+
+
+    End Sub
+
+    Protected Sub DeleteCategoryRec(ByVal _p_ID As String)
+
+        Dim cn As New OleDbConnection(connectionstring)
+        Dim cmd As New OleDbCommand()
+        Dim lsql1 As String
+        Dim lsql2 As String
+        lblmessage.text = ""
+        Dim _p_searchkey As String = " where " & IDField & "=" & _p_ID
+
+        If isnumeric(_p_ID) = False Then
+            lblmessage.text = "Delete Fail. Invalid ID"
+            Exit Sub
+        End If
+
+        Dim ltempwhere As String = ""
+
+        Try
+
+
+            If IDPField.Trim <> "" Then
+                If isnumeric(bid.value) = False Then
+                    Exit Sub
+                End If
+                ltempwhere = ltempwhere & " and " & IDPField & "=" & bid.value
+            End If
+            If AppIDField.Trim <> "" Then
+                ltempwhere = ltempwhere & " and " & AppIDField & "='" & WebLib.ApplicationID & "'"
+            End If
+            If MerchantIDField.Trim <> "" Then
+                ltempwhere = ltempwhere & " and " & MerchantIDField & "='" & WebLib.MerchantID & "'"
+            End If
+            If FilterField.Trim <> "" Then
+                ltempwhere = ltempwhere & " and " & FilterField & "='" & WebLib.FilterCode & "'"
+            End If
+
+
+            cn.Open()
+            lsql1 = "Delete from " & TableName & " " & _p_searchkey & ltempwhere & "; "
+            lsql2 = "Delete from module where mod_catid = " & _p_ID
+            cmd.CommandText = lsql1 & " " & lsql2
+            cmd.Connection = cn
+            cmd.ExecuteNonQuery()
+            cn.Dispose()
+            cmd.Dispose()
+
+            Call loaddata()
+        Catch ex As Exception
+            lblmessage.text = ex.Message
+        End Try
+
+
+
+    End Sub
+
+
+    Protected Sub DeleteDeptRec(ByVal _p_ID As String)
+
+        Dim cn As New OleDbConnection(connectionstring)
+        Dim cmd As New OleDbCommand()
+        Dim lsql1 As String
+        Dim lsql2 As String
+        Dim lsql3 As String
+        lblmessage.text = ""
+        Dim _p_searchkey As String = " where " & IDField & "=" & _p_ID
+
+        If isnumeric(_p_ID) = False Then
+            lblmessage.text = "Delete Fail. Invalid ID"
+            Exit Sub
+        End If
+
+        Dim ltempwhere As String = ""
+
+        Try
+
+
+            If IDPField.Trim <> "" Then
+                If isnumeric(bid.value) = False Then
+                    Exit Sub
+                End If
+                ltempwhere = ltempwhere & " and " & IDPField & "=" & bid.value
+            End If
+            If AppIDField.Trim <> "" Then
+                ltempwhere = ltempwhere & " and " & AppIDField & "='" & WebLib.ApplicationID & "'"
+            End If
+            If MerchantIDField.Trim <> "" Then
+                ltempwhere = ltempwhere & " and " & MerchantIDField & "='" & WebLib.MerchantID & "'"
+            End If
+            If FilterField.Trim <> "" Then
+                ltempwhere = ltempwhere & " and " & FilterField & "='" & WebLib.FilterCode & "'"
+            End If
+
+
+            cn.Open()
+            lsql1 = "Delete from " & TableName & " " & _p_searchkey & ltempwhere & "; "
+            lsql2 = "Delete from category where cat_deptid = " & _p_ID
+            lsql3 = "Delete from module where mod_deptid = " & _p_ID
+            cmd.CommandText = lsql1 & " " & lsql2 & " " & lsql3
             cmd.Connection = cn
             cmd.ExecuteNonQuery()
             cn.Dispose()
@@ -639,6 +756,20 @@ Public Class listpage
         Call AssignSearch()
         lblmessage.text = ""
 
+    End Sub
+
+    Public Shared Sub LogtheAudit(ByVal theMessage As String)
+        Dim strFile As String = "c:\officeonelog\ErrorLog3.txt"
+        Dim fileExists As Boolean = File.Exists(strFile)
+
+        Try
+
+            Using sw As New StreamWriter(File.Open(strFile, FileMode.Append))
+                sw.WriteLine(DateTime.Now & " - " & theMessage)
+            End Using
+        Catch ex As Exception
+
+        End Try
     End Sub
 End Class
 

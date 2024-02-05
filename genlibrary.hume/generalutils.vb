@@ -22,8 +22,8 @@ Public Class clslogins
             ad.Fill(ds, "datarecords")
             For Each dr In ds.Tables("datarecords").Rows
                 counter = counter + 1
-                WebLib.LoginUserCompanySelected = "HCSB"
-				
+                WebLib.LoginUserCompanySelected = "RGTECH"
+
                 WebLib.LoginUser = dr("usr_code").ToString.ToUpper
                 WebLib.LoginUserName = dr("usr_name").ToString.ToUpper
                 WebLib.StartupApp = dr("usr_firstscreen") & ""

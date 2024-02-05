@@ -64,7 +64,7 @@ Public Class lookuppage
     Private Sub Page_Init(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Init
 
         If Weblib.LoginUser.Trim = "" Then
-            response.redirect("login.aspx")
+            response.redirect("loginstaff.aspx")
         End If
 
         Call InitObjects()

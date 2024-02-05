@@ -226,16 +226,50 @@ Public Class Redirector
                     ltemp = "wiz-postpage.aspx?NextPage=wiz-selectcustomer.aspx&wp1=modules/custom/cusccrc.aspx&wp7=Y&wp5=" & RefNo
                 End If
 
-            Case "zcustom_cr"
-                cmd.CommandText = "Select cus_id as uid from zcustom_cr where cus_ucode='" & RedirectUID & "'"
-                ltemp = "postpage.aspx?NextPage=modules/custom/cr.aspx&ga=<<ID>>"
+            Case "zcustom_crc"
+                cmd.CommandText = "Select cus_id as uid from zcustom_crC where cus_ucode='" & RedirectUID & "'"
+                ltemp = "postpage.aspx?NextPage=modules/custom/crC.aspx&ga=<<ID>>"
 
                 If isadd = True Then
-                    ltemp = "wiz-postpage.aspx?NextPage=wiz-selectcustomer.aspx&wp1=modules/custom/cr.aspx&wp7=Y&wp5=" & RefNo
+                    'ltemp = "wiz-postpage.aspx?NextPage=wiz-selectcustomer.aspx&wp1=modules/custom/cr.aspx&wp7=Y&wp5=" & RefNo
+                    ltemp = "wiz-postpage.aspx?NextPage=modules/custom/crC.aspx"
                 End If
 
-                kjfkds
-                kji
+            Case "zcustom_cri"
+                cmd.CommandText = "Select cus_id as uid from zcustom_crI where cus_ucode='" & RedirectUID & "'"
+                ltemp = "postpage.aspx?NextPage=modules/custom/crI.aspx&ga=<<ID>>"
+
+                If isAdd = True Then
+                    'ltemp = "wiz-postpage.aspx?NextPage=wiz-selectcustomer.aspx&wp1=modules/custom/cr.aspx&wp7=Y&wp5=" & RefNo
+                    ltemp = "wiz-postpage.aspx?NextPage=modules/custom/crI.aspx"
+                End If
+
+            Case "zcustom_crs"
+                cmd.CommandText = "Select cus_id as uid from zcustom_crS where cus_ucode='" & RedirectUID & "'"
+                ltemp = "postpage.aspx?NextPage=modules/custom/crS.aspx&ga=<<ID>>"
+
+                If isAdd = True Then
+                    'ltemp = "wiz-postpage.aspx?NextPage=wiz-selectcustomer.aspx&wp1=modules/custom/cr.aspx&wp7=Y&wp5=" & RefNo
+                    ltemp = "wiz-postpage.aspx?NextPage=modules/custom/crS.aspx"
+                End If
+
+            Case "zcustom_sti"
+                cmd.CommandText = "Select cus_id as uid from zcustom_stI where cus_ucode='" & RedirectUID & "'"
+                ltemp = "postpage.aspx?NextPage=modules/custom/stI.aspx&ga=<<ID>>"
+
+                If isAdd = True Then
+                    'ltemp = "wiz-postpage.aspx?NextPage=wiz-selectcustomer.aspx&wp1=modules/custom/cr.aspx&wp7=Y&wp5=" & RefNo
+                    ltemp = "wiz-postpage.aspx?NextPage=modules/custom/stI.aspx"
+                End If
+
+            Case "zcustom_sts"
+                cmd.CommandText = "Select cus_id as uid from zcustom_stS where cus_ucode='" & RedirectUID & "'"
+                ltemp = "postpage.aspx?NextPage=modules/custom/stS.aspx&ga=<<ID>>"
+
+                If isAdd = True Then
+                    'ltemp = "wiz-postpage.aspx?NextPage=wiz-selectcustomer.aspx&wp1=modules/custom/cr.aspx&wp7=Y&wp5=" & RefNo
+                    ltemp = "wiz-postpage.aspx?NextPage=modules/custom/stS.aspx"
+                End If
 
             Case Else
                 Return ""

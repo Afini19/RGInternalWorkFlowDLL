@@ -41,7 +41,7 @@ Public Class detailspage
     End Sub
     Private Sub Page_Init(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Init
         If Weblib.LoginUser.Trim = "" Then
-            response.redirect("~/login.aspx")
+            response.redirect("~/loginstaff.aspx")
         End If
 
 
@@ -163,15 +163,15 @@ Public Class detailspage
                 cmd.commandtext = cmd.commandtext & ";" & _p_addsql
             End If
 
-
             Weblib.ErrorTrap = cmd.CommandText
+            LogtheAudit(cmd.CommandText)
 
             cmd.Connection = cn
             cmd.ExecuteNonQuery()
 
             Return True
         Catch Err As Exception
-            lblmessage.text = Err.message
+            lblmessage.text = Err.Message
             Return False
         Finally
             cn.Close()
@@ -179,6 +179,20 @@ Public Class detailspage
         End Try
 
     End Function
+
+    Public Sub LogtheAudit(ByVal theMessage As String)
+        Dim strFile As String = "c:\officeonelog\ErrorLog3.txt"
+        Dim fileExists As Boolean = File.Exists(strFile)
+
+        Try
+
+            Using sw As New StreamWriter(File.Open(strFile, FileMode.Append))
+                sw.WriteLine(DateTime.Now & " - " & theMessage)
+            End Using
+        Catch ex As Exception
+
+        End Try
+    End Sub
 
 End Class
 
