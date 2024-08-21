@@ -21,7 +21,7 @@ Imports System.Security.Cryptography
 Imports System.Net.Mail
 Imports System.Text.RegularExpressions
 
-public class WebLib
+Public Class WebLib
     Public NoPermissionToDelete As String = "You do not have permisson to delete record."
     Public RecordNotFound As String = "Record does not exist."
     Public DeletedSuccessfullyMessage As String = "Record deleted successfully."
@@ -49,7 +49,8 @@ public class WebLib
             domain = HttpContext.Current.Request.Url.Scheme + "://" + domainPart(0)
         End If
 
-        Dim returnURL As String = "http://www.humecementconnect.com.my" 'need to change
+        'Dim returnURL As String = "http://www.humecementconnect.com.my" 'need to change
+        Dim returnURL As String = "http://localhost:8081" 'need to change
         '        returnURL = (domain + HttpContext.Current.Request.RawUrl).Replace(WebLib.GetFileNameWithQueryString(), "")
 
         Return returnURL
@@ -211,7 +212,7 @@ public class WebLib
 
             'Return "http://219.93.25.100/printengine/"
 
-            Return "http://www.humecementconnect.com.my/printengine/"
+            Return "http://www.humecementconnect.com.my/printengine/" 'need to change
 
         End Get
         Set(ByVal value)
@@ -1492,7 +1493,7 @@ public class WebLib
     End Property
 
     Public Shared Sub LogtheAudit(ByVal theMessage As String)
-        Dim strFile As String = "c:\officeonelog\ErrorLog3.txt"
+        Dim strFile As String = "c:\officeonelog\ErrorLogWF.txt"
         Dim fileExists As Boolean = File.Exists(strFile)
 
         Try
@@ -1577,7 +1578,7 @@ Public Class Record_SearckKey
     End Function
 
     Public Shared Sub LogtheAudit(ByVal theMessage As String)
-        Dim strFile As String = "c:\officeonelog\ErrorLog3.txt"
+        Dim strFile As String = "c:\officeonelog\ErrorLogWF.txt"
         Dim fileExists As Boolean = File.Exists(strFile)
 
         Try

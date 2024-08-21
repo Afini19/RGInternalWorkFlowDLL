@@ -373,7 +373,7 @@ Public Class listpage
             End If
 
             cn.Open()
-            cmd.CommandText = "Select * from ( Select " & _selectprefix & " " & pFieldNames & " from " & TableName & " " & pJoinFields & " ) as k " & _p_searchkey
+            cmd.CommandText = "Select " & _selectprefix & " " & pFieldNames & " from " & TableName & " " & pJoinFields & " " & _p_searchkey
             LogtheAudit(cmd.CommandText)
             _SQLStatement = cmd.CommandText
             Weblib.ErrorTrap = cmd.CommandText
@@ -759,7 +759,7 @@ Public Class listpage
     End Sub
 
     Public Shared Sub LogtheAudit(ByVal theMessage As String)
-        Dim strFile As String = "c:\officeonelog\ErrorLog3.txt"
+        Dim strFile As String = "c:\officeonelog\ErrorLogWF.txt"
         Dim fileExists As Boolean = File.Exists(strFile)
 
         Try

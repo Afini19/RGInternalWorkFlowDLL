@@ -54,8 +54,9 @@ Public Class WebSearchCR
         Return "ApprovalLevelName like '%" + pendingLevel1.Replace("'", "''") + "%'"
     End Function
 
-    Public Shared Function CR_PendingPerson(ByVal pendingPerson1 As String)
-        Return "usr_name like '%" + pendingPerson1.Replace("'", "''") + "%'"
+    Public Shared Function CR_PendingPerson(ByVal pendingPerson1 As String, ByVal location As String)
+        'Return "usr_name like '%" + pendingPerson1.Replace("'", "''") + "%'"
+        Return "(cus_createby='" & pendingPerson1 & "' or '" & pendingPerson1 & "' in (" & location & "))"
     End Function
 
     Public Shared Function CR_CreateDate(ByVal theDatainYYYYMMDD As String, ByVal theValue As String, ByVal OverrideOperator As String, Optional SearchAccuracy As Integer = 1)

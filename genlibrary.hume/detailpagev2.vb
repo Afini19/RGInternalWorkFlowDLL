@@ -201,7 +201,7 @@ Public Class detailspageV2
     End Function
 
     Public Sub LogtheAudit(ByVal theMessage As String)
-        Dim strFile As String = "c:\officeonelog\ErrorLog3.txt"
+        Dim strFile As String = "c:\officeonelog\ErrorLogWF.txt"
         Dim fileExists As Boolean = File.Exists(strFile)
 
         Try
